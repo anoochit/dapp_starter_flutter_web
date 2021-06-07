@@ -54,10 +54,7 @@ class _HomePageState extends State<HomePage> {
               padding: EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
               child: Row(
                 children: [
-                  Icon(
-                    Icons.home_work_outlined,
-                    size: 40,
-                  ),
+                  SiteLogo(title: 'dApp Boilerplate'),
                   Spacer(),
                   (address == null)
                       ? ElevatedButton(
@@ -87,6 +84,32 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
+class SiteLogo extends StatelessWidget {
+  final String title;
+  const SiteLogo({
+    Key? key,
+    required this.title,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        FlutterLogo(
+          size: 48,
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+            title,
+            style: TextStyle(fontSize: 24),
+          ),
+        )
+      ],
+    );
+  }
+}
+
 class JdenticonProfile extends StatelessWidget {
   const JdenticonProfile({
     Key? key,
@@ -104,7 +127,7 @@ class JdenticonProfile extends StatelessWidget {
 
     return Container(
       height: 40,
-      decoration: BoxDecoration(color: Colors.grey.shade200, borderRadius: BorderRadius.circular(40)),
+      decoration: BoxDecoration(color: Colors.grey.shade300, borderRadius: BorderRadius.circular(40)),
       child: Row(
         children: [
           CircleAvatar(
