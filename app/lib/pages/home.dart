@@ -1,7 +1,8 @@
-import 'dart:math';
+import 'dart:js_util';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_web3_provider/ethereum.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
 
 class HomePage extends StatefulWidget {
@@ -12,9 +13,18 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  // ignore: avoid_init_to_null
+  String? selectedAddress;
+
   @override
   void initState() {
     super.initState();
+
+    if (ethereum != null) {
+      // then an ethereum provider was injected
+      selectedAddress = ethereum!.selectedAddress;
+      print('init address = ${ethereum!.selectedAddress}');
+    }
   }
 
   @override
@@ -29,25 +39,31 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   SiteLogo(title: 'dApp Boilerplate'),
                   Spacer(),
-                  // (address == null)
-                  //     ? ElevatedButton(
-                  //         child: Text("Connect Wallet".toUpperCase()),
-                  //         style: ButtonStyle(
-                  //           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                  //             RoundedRectangleBorder(
-                  //               borderRadius: BorderRadius.circular(18.0),
-                  //             ),
-                  //           ),
-                  //         ),
-                  //         onPressed: () async {
-                  //           await connectWallet();
-                  //         },
-                  //       )
-                  //     : JdenticonProfile(address: address)
+                  (selectedAddress != null)
+                      ? JdenticonProfile(address: selectedAddress)
+                      : ElevatedButton(
+                          child: Text("Connect Wallet".toUpperCase()),
+                          style: ButtonStyle(
+                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                              RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(18.0),
+                              ),
+                            ),
+                          ),
+                          onPressed: () async {
+                            // connect wallet
+                            print('> connect to wallet');
+                            var accounts = await promiseToFuture(ethereum!.request(RequestParams(method: 'eth_requestAccounts')));
+                            print(accounts);
+                            setState(() {
+                              selectedAddress = ethereum!.selectedAddress;
+                              print('> selected address = $selectedAddress');
+                            });
+                          },
+                        )
                 ],
               ),
             ),
-            ElevatedButton(onPressed: () {}, child: Text("Test"))
           ],
         ),
       ),

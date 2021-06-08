@@ -25,6 +25,8 @@ dependencies:
     sdk: flutter
   cupertino_icons: ^1.0.2
   flutter_svg: ^0.22.0
+  flutter_web3_provider: ^1.0.5
+  decimal: ^1.1.0
   jdenticon_dart: ^2.0.0
   web3dart: ^2.1.3
 
