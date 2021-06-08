@@ -1,13 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:jdenticon_dart/jdenticon_dart.dart';
-
-import 'dart:convert';
-import 'dart:html';
-import 'dart:typed_data';
-
-import 'package:web3dart/browser.dart';
-import 'package:web3dart/web3dart.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key? key}) : super(key: key);
@@ -19,29 +14,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   void initState() {
-    connectWallet();
     super.initState();
-  }
-
-  EthereumAddress? address;
-
-  connectWallet() async {
-    final eth = window.ethereum;
-    if (eth == null) {
-      print('MetaMask is not available');
-      return;
-    }
-
-    final client = Web3Client.custom(eth.asRpcService());
-    final credentials = await eth.requestAccount();
-
-    // print('Using ${credentials.address}');
-    // print('Client is listening: ${await client.getNetworkId()}');
-    // print('Client is listening: ${await client.isListeningForNetwork()}');
-
-    setState(() {
-      address = credentials.address;
-    });
   }
 
   @override
@@ -56,27 +29,25 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   SiteLogo(title: 'dApp Boilerplate'),
                   Spacer(),
-                  (address == null)
-                      ? ElevatedButton(
-                          child: Text("Connect Wallet".toUpperCase()),
-                          style: ButtonStyle(
-                            // foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
-                            // backgroundColor: MaterialStateProperty.all<Color>(Colors.red),
-                            shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                              RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(18.0),
-                                //side: BorderSide(color: Colors.red),
-                              ),
-                            ),
-                          ),
-                          onPressed: () async {
-                            await connectWallet();
-                          },
-                        )
-                      : JdenticonProfile(address: address)
+                  // (address == null)
+                  //     ? ElevatedButton(
+                  //         child: Text("Connect Wallet".toUpperCase()),
+                  //         style: ButtonStyle(
+                  //           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
+                  //             RoundedRectangleBorder(
+                  //               borderRadius: BorderRadius.circular(18.0),
+                  //             ),
+                  //           ),
+                  //         ),
+                  //         onPressed: () async {
+                  //           await connectWallet();
+                  //         },
+                  //       )
+                  //     : JdenticonProfile(address: address)
                 ],
               ),
             ),
+            ElevatedButton(onPressed: () {}, child: Text("Test"))
           ],
         ),
       ),
@@ -96,7 +67,7 @@ class SiteLogo extends StatelessWidget {
     return Row(
       children: [
         FlutterLogo(
-          size: 48,
+          size: 46,
         ),
         Padding(
           padding: const EdgeInsets.all(8.0),
@@ -116,7 +87,7 @@ class JdenticonProfile extends StatelessWidget {
     required this.address,
   }) : super(key: key);
 
-  final EthereumAddress? address;
+  final String? address;
 
   @override
   Widget build(BuildContext context) {
